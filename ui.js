@@ -7,6 +7,10 @@ function editrcpt(newid) {
         url: "api/" + editid,
         success: function(data) {
             $("#receiptdata").show();
+            for (k in data) {
+                $("[name="+k+"]").val(data[k]);
+            }
+            $("select").selectmenu("refresh");
         }
     });
 }
