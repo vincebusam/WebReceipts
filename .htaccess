@@ -1,0 +1,5 @@
+Addhandler cgi-script .py
+Options +ExecCGI
+
+RewriteEngine  on
+RewriteRule    api  api.py
