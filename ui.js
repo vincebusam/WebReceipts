@@ -23,6 +23,8 @@ $(document).ready(function() {
     });
 
     $(".actiontoggle").click(function() {
+        if ($(this).hasClass("ui-btn-active"))
+            return;
         $("#editreceipts").toggle();
         $("#newreceipts").toggle();
     });
