@@ -15,6 +15,8 @@ function editrcpt(newid) {
     });
 }
 
+var activebtn;
+
 $(document).ready(function() {
     $("#editreceipts").hide();
     $("#receiptdata").hide();
@@ -22,9 +24,12 @@ $(document).ready(function() {
         dateFormat: "yy-mm-dd"
     });
 
+    activebtn = $(".ui-navbar .ui-btn-active").attr("id");
     $(".actiontoggle").click(function() {
-        if ($(this).hasClass("ui-btn-active"))
+        var myid = $(this).attr("id");
+        if (myid == activebtn)
             return;
+        activebtn = myid;
         $("#editreceipts").toggle();
         $("#newreceipts").toggle();
     });
