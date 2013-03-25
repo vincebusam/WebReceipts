@@ -6,6 +6,7 @@ function editrcpt(newid) {
     $.ajax({
         url: "api/" + editid,
         success: function(data) {
+            $("#update").button("disable");
             $("#receiptdata :input").each(function() {
                 $(this).val("");
             });
@@ -14,6 +15,9 @@ function editrcpt(newid) {
                 $("[name="+k+"]").val(data[k]);
             }
             $("select").selectmenu("refresh");
+            $("#receiptdata :input").change(function() {
+                $("#update").button("enable");
+            });
         }
     });
 }
