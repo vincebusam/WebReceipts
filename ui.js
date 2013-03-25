@@ -24,6 +24,14 @@ $(document).ready(function() {
         dateFormat: "yy-mm-dd"
     });
 
+    $("#upload").button("disable");
+    $("#image").change(function() {
+        if ($("#image").val())
+            $("#upload").button("enable");
+        else
+            $("#upload").button("disable");
+    });
+
     activebtn = $(".ui-navbar .ui-btn-active").attr("id");
     $(".actiontoggle").click(function() {
         var myid = $(this).attr("id");
