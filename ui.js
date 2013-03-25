@@ -6,6 +6,9 @@ function editrcpt(newid) {
     $.ajax({
         url: "api/" + editid,
         success: function(data) {
+            $("#receiptdata :input").each(function() {
+                $(this).val("");
+            });
             $("#receiptdata").show();
             for (k in data) {
                 $("[name="+k+"]").val(data[k]);
