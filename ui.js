@@ -2,6 +2,7 @@ var editid;
 
 function editrcpt(newid) {
     editid = newid;
+    $.mobile.loading("show");
     $("#receiptimg").attr("src","data/" + editid + ".jpg");
     $.ajax({
         url: "api/" + editid,
@@ -18,6 +19,7 @@ function editrcpt(newid) {
             $("#receiptdata :input").change(function() {
                 $("#update").button("enable");
             });
+            $.mobile.loading("hide");
         }
     });
 }
@@ -51,6 +53,7 @@ $(document).ready(function() {
 
     $("#upload").click(function() {
         if ($("#image").val() != '') {
+            $.mobile.loading("show");
             var fd = new FormData();
             fd.append("image",$(":file")[0].files[0]);
             fd.append("test","hi");
@@ -61,6 +64,7 @@ $(document).ready(function() {
                 processData: false,
                 contentType: false,
                 success: function(data) {
+                    $.mobile.loading("hide");
                     $("#goedit").click();
                     editrcpt(data);
                 },
@@ -72,6 +76,7 @@ $(document).ready(function() {
 
     $("#update").click(function () {
         var data = {}
+        $.mobile.loading("show");
         $("#receiptdata :input").each(function() {
             if ($(this).val() && $(this).attr("name"))
                 data[$(this).attr("name")] = $(this).val();
@@ -81,6 +86,7 @@ $(document).ready(function() {
             type: "POST",
             data: data,
             success: function(data) {
+                $.mobile.loading("hide");
             },
             error: function(data) {
                 alert("Error updating");
