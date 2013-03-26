@@ -4,6 +4,7 @@ function editrcpt(newid) {
     editid = newid;
     $.mobile.loading("show");
     $("#receiptimg").attr("src","data/" + editid + ".jpg");
+    $("#receiptslist").hide();
     $.ajax({
         url: "api/" + editid,
         success: function(data) {
@@ -12,6 +13,7 @@ function editrcpt(newid) {
                 $(this).val("");
             });
             $("#receiptdata").show();
+            $("#receiptslist").hide();
             for (k in data) {
                 $("[name="+k+"]").val(data[k]);
             }
@@ -44,6 +46,8 @@ $(document).ready(function() {
     activebtn = $(".ui-navbar .ui-btn-active").attr("id");
     $(".actiontoggle").click(function() {
         var myid = $(this).attr("id");
+        $("#receiptslist").show();
+        $("#receiptdata").hide();
         if (myid == activebtn)
             return;
         activebtn = myid;
@@ -86,6 +90,7 @@ $(document).ready(function() {
             type: "POST",
             data: data,
             success: function(data) {
+                $("#receiptdata").hide();
                 $.mobile.loading("hide");
             },
             error: function(data) {
