@@ -4,6 +4,7 @@ import sys
 import cgi
 import uuid
 import urlparse
+import parseocr
 try:
     # This is much faster if we have it
     import simplejson as json
@@ -31,7 +32,14 @@ def output(obj, status=200):
     print json.dumps(obj, default=str, indent=2)
     sys.exit(0)
 
-rcptid = urlparse.urlparse(os.getenv("REQUEST_URI")).path.split("api",2)[1].lstrip("/")
+rcptid = None
+endpoint = None
+request = urlparse.urlparse(os.getenv("REQUEST_URI")).path.split("/")
+apiindex = request.index("api")
+if apiindex and len(request) > apiindex+1:
+    rcptid = request[apiindex+1]
+if apiindex and len(request) > apiindex+2:
+    endpoint = request[apiindex+2]
 
 if os.getenv("REQUEST_METHOD") == "POST":
     if rcptid:
@@ -53,6 +61,12 @@ if os.getenv("REQUEST_METHOD") == "POST":
 
 if os.getenv("REQUEST_METHOD") == "GET":
     if rcptid:
+        if endpoint == "bounds":
+            parsed = parseocr.OCR(datadir+"/"+rcptid)
+            output(parsed.maxbounds())
+        elif endpoint == "ocr":
+            parsed = parseocr.OCR(datadir+"/"+rcptid)
+            output(parsed.guess())
         for rcpt in db:
             if rcpt["id"] == rcptid:
                 output(rcpt)
