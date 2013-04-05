@@ -105,7 +105,7 @@ $(document).ready(function() {
               d = data[d];
               var newhtml = '<li data-theme="c">';
               newhtml += '<a id="'+d.id+'"href="#" data-transition="slide">';
-              newhtml += '<img src="data/'+d.id+'.jpg">';
+              //newhtml += '<img src="data/'+d.id+'.jpg">';
               newhtml += (d.name || "Unnamed")+'</a>';
               newhtml += '</li>';
               $("#receiptslist").append(newhtml);
