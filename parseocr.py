@@ -91,10 +91,16 @@ class OCR:
             if "total" in line["text"].lower():
                 totalline = line
                 ret["totalbox"] = line
+                digits = "".join([x for x in line["text"] if not x.isalpha()])
+                if digits:
+                    try:
+                        ret["total"] = int(float(digits.replace(" ","").replace("$",""))*100)
+                    except:
+                        pass
                 if "".join([x for x in line["text"] if x.isalpha()]).lower() == "total":
                     break
 
-        if totalline:
+        if totalline and "total" not in ret:
             for line in self.lines:
                 if line == totalline:
                     continue
