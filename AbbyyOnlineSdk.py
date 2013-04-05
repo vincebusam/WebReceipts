@@ -17,6 +17,8 @@ import xml.dom.minidom
 class ProcessingSettings:
 	Language = "English"
 	OutputFormat = "docx"
+	Profile = "documentConversion"
+	ImageSource = "auto"
 
 
 class Task:
@@ -39,7 +41,9 @@ class AbbyyOnlineSdk:
 	def ProcessImage( self, filePath, settings ):
 		urlParams = urllib.urlencode({
 			"language" : settings.Language,
-			"exportFormat" : settings.OutputFormat
+			"exportFormat" : settings.OutputFormat,
+			"profile": settings.Profile,
+			"imageSource": settings.ImageSource
 			})
 		requestUrl = self.ServerUrl + "processImage?" + urlParams
 
