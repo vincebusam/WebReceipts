@@ -60,7 +60,6 @@ $(document).ready(function() {
             $.mobile.loading("show");
             var fd = new FormData();
             fd.append("image",$(":file")[0].files[0]);
-            fd.append("test","hi");
             $.ajax({
                 url: "api",
                 type: "POST",
