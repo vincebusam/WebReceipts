@@ -21,6 +21,10 @@ function editrcpt(newid) {
             $("#receiptdata :input").change(function() {
                 $("#update").button("enable");
             });
+            if ($('#doocr').css('display') != 'none') {
+                $("#receiptdiv").css("width",'50%');
+                $("#receiptdiv").height($("#receiptimg").height());
+            }
             $.mobile.loading("hide");
         }
     });
