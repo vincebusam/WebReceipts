@@ -20,6 +20,8 @@ class OCR:
 	settings = ProcessingSettings()
 	settings.Language = "English"
 	settings.OutputFormat = "xml"
+	settings.ImageSource = "photo"
+	settings.profile = "textExtraction"
 	task = processor.ProcessImage(imageid+".jpg", settings)
 	if task == None:
 		return
