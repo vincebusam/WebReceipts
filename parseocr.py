@@ -1,13 +1,17 @@
 #!/usr/bin/python
+import os
 import sys
 import json
 from lxml import etree
 import dateutil.parser
 from AbbyyOnlineSdk import *  
 
+def getconfig(cfg):
+    return [x.strip() for x in open(os.path.dirname(__file__)+"/config.txt") if x.startswith(cfg)][0].split("=")[1]
+
 processor = AbbyyOnlineSdk()
-processor.ApplicationId = os.environ["ABBYY_APPID"]
-processor.Password = os.environ["ABBYY_PWD"]
+processor.ApplicationId = os.getenv("ABBYY_APPID") or getconfig("ABBYY_APPID")
+processor.Password = os.getenv("ABBYY_PWD") or getconfig("ABBYY_PWD")
 
 class OCR:
     def __init__(self, imageid):
