@@ -22,8 +22,23 @@ function editrcpt(newid) {
                 $("#update").button("enable");
             });
             if ($('#doocr').css('display') != 'none') {
-                $("#receiptdiv").css("width",'50%');
+                var i = new Image();
+                i.src = $("#receiptimg").attr("src");
+                $("#receiptdiv").css("width",i.width+"px");
+                $("#receiptdiv").css("height",i.height+"px");
+                $("#receiptdiv").css("overflow",'hidden');
                 $("#receiptdiv").height($("#receiptimg").height());
+                $("#cropbox").css("top","0px");
+                $("#cropbox").css("left","0px");
+                $("#cropbox").width($("#receiptimg").width()-6);
+                $("#cropbox").height($("#receiptimg").height()-6);
+                if (data.crop_top) {
+                    $("#cropbox").css("top",data.crop_top+"px");
+                    $("#cropbox").css("left",data.crop_left+"px");
+                    $("#cropbox").width(data.crop_width);
+                    $("#cropbox").height(data.crop_height);
+                }
+                $("#cropbox").show();
             }
             $.mobile.loading("hide");
         }
@@ -88,16 +103,54 @@ $(document).ready(function() {
             if ($(this).val() && $(this).attr("name"))
                 data[$(this).attr("name")] = $(this).val();
         });
+        if ($('#doocr').css('display') != 'none') {
+            data["crop_top"] = parseInt($("#cropbox").css("top"));
+            data["crop_left"] = parseInt($("#cropbox").css("left"));
+            data["crop_height"] = $("#cropbox").height();
+            data["crop_width"] = $("#cropbox").width();
+        }
         $.ajax({
             url: "api/" + editid,
             type: "POST",
             data: data,
             success: function(data) {
                 $("#receiptdata").hide();
+                $("#receiptslist").show();
                 $.mobile.loading("hide");
             },
             error: function(data) {
                 alert("Error updating");
+            }
+        });
+    });
+
+    $("#cropbox").resizable({
+        containment: "parent",
+        handles: "n, e, s, w, ne, se, sw, nw",
+        autoHide: true,
+        resize: function() {
+            $("#update").button("enable");
+        }
+    });
+    $("#cropbox").hide();
+
+    $("#doocr").click(function () {
+        $.mobile.loading("show");
+        $.ajax({
+            url: "api/" + editid + "/ocr",
+            success: function(data) {
+                $("#cropbox").css("left",data["bounds"]["l"]+"px");
+                $("#cropbox").css("top",data["bounds"]["t"]+"px");
+                $("#cropbox").width(data["bounds"]["r"]-data["bounds"]["l"]);
+                $("#cropbox").height(data["bounds"]["b"]-data["bounds"]["t"]);
+                $("#update").button("enable");
+                if (data.title && !$("#name").val())
+                    $("#name").val(data.title);
+                if (data.date && !$("#date").val())
+                    $("#date").val(data.date);
+                if (data.total && !$("#amount").val())
+                    $("#amount").val(parseInt(data.total)/100);
+                $.mobile.loading("hide");
             }
         });
     });
