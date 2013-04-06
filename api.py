@@ -66,7 +66,9 @@ if os.getenv("REQUEST_METHOD") == "GET":
             output(parsed.maxbounds())
         elif endpoint == "ocr":
             parsed = parseocr.OCR(datadir+"/"+rcptid)
-            output(parsed.guess())
+            ret = parsed.guess()
+            ret["bounds"] = parsed.maxbounds()
+            output(ret)
         for rcpt in db:
             if rcpt["id"] == rcptid:
                 output(rcpt)
