@@ -7,7 +7,7 @@ import dateutil.parser
 from AbbyyOnlineSdk import *  
 
 def getconfig(cfg):
-    return [x.strip() for x in open(os.path.dirname(__file__)+"/config.txt") if x.startswith(cfg)][0].split("=")[1]
+    return [x.strip() for x in open((os.path.dirname(__file__) or ".")+"/config.txt") if x.startswith(cfg)][0].split("=")[1]
 
 processor = AbbyyOnlineSdk()
 processor.ApplicationId = os.getenv("ABBYY_APPID") or getconfig("ABBYY_APPID")
