@@ -55,10 +55,10 @@ class OCR:
     def maxbounds(self):
         ret = {'l': sys.maxint, 't': sys.maxint, 'r': 0, 'b': 0}
         for line in self.lines:
-            ret['l'] = min(ret['l'],line['l'])
-            ret['t'] = min(ret['t'],line['t'])
-            ret['r'] = max(ret['r'],line['r'])
-            ret['b'] = max(ret['b'],line['b'])
+            ret['l'] = min(ret['l'],line['l']-5)
+            ret['t'] = min(ret['t'],line['t']-5)
+            ret['r'] = max(ret['r'],line['r']+5)
+            ret['b'] = max(ret['b'],line['b']+5)
         return ret
 
     def expandbox(self, old, new):
