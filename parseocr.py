@@ -92,7 +92,7 @@ class OCR:
 
         totalline = None
         for line in self.lines:
-            if "total" in line["text"].lower():
+            if "total" in line["text"].lower() or "amount due" in line["text"].lower():
                 totalline = line
                 ret["totalbox"] = line
                 digits = "".join([x for x in line["text"] if not x.isalpha()])
