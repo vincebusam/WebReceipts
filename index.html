@@ -22,7 +22,7 @@
         <style>
 	    /* Smartphones ----------- */
 	    @media only screen and (max-width: 760px) {
-	        #doocr { display: none; }
+	        #ocrdiv { display: none; }
             }
             @media only screen and (min-width: 761px) {
                 #receiptinput {
@@ -92,7 +92,9 @@
                     <div id="cropbox"></div>
                 </div>
                 <div id="receiptinput">
-                <input id="doocr" type="submit" data-iconpos="left" value="Auto-OCR" />
+                  <div id="ocrdiv">
+                    <input id="doocr" type="submit" data-iconpos="left" value="Auto-OCR" />
+                  </div>
                 <div data-role="fieldcontain">
                     <fieldset data-role="controlgroup">
                         <label for="name">

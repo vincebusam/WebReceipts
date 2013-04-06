@@ -21,7 +21,7 @@ function editrcpt(newid) {
             $("#receiptdata :input").change(function() {
                 $("#update").button("enable");
             });
-            if ($('#doocr').css('display') != 'none') {
+            if ($('#ocrdiv').css('display') != 'none') {
                 var i = new Image();
                 i.src = $("#receiptimg").attr("src");
                 $("#receiptdiv").css("width",i.width+"px");
@@ -103,7 +103,7 @@ $(document).ready(function() {
             if ($(this).val() && $(this).attr("name"))
                 data[$(this).attr("name")] = $(this).val();
         });
-        if ($('#doocr').css('display') != 'none') {
+        if ($('#ocrdiv').css('display') != 'none') {
             data["crop_top"] = parseInt($("#cropbox").css("top"));
             data["crop_left"] = parseInt($("#cropbox").css("left"));
             data["crop_height"] = $("#cropbox").height();
