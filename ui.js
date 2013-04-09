@@ -21,6 +21,10 @@ function editrcpt(newid) {
             $("#receiptdata :input").change(function() {
                 $("#update").button("enable");
             });
+            if (data["reimburse"] == "true")
+                $("#reimburse").attr("checked", true).checkboxradio("refresh");
+            else
+                $("#reimburse").attr("checked", false).checkboxradio("refresh");
             if ($('#ocrdiv').css('display') != 'none') {
                 var i = new Image();
                 i.src = $("#receiptimg").attr("src");
@@ -103,6 +107,8 @@ $(document).ready(function() {
             if ($(this).val() && $(this).attr("name"))
                 data[$(this).attr("name")] = $(this).val();
         });
+        if ($("#reimburse").is(":checked"))
+            data["reimburse"] = true;
         if ($('#ocrdiv').css('display') != 'none') {
             data["crop_top"] = parseInt($("#cropbox").css("top"));
             data["crop_left"] = parseInt($("#cropbox").css("left"));
