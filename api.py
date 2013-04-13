@@ -10,6 +10,8 @@ try:
     import simplejson as json
 except:
     import json
+from PIL import Image
+import cStringIO as StringIO
 
 datadir = os.path.dirname(__file__) + "/data"
 dbfn = datadir + "/db.json"
@@ -51,7 +53,7 @@ if os.getenv("REQUEST_METHOD") == "POST":
                 output(rcpt)
     elif "image" in form:
         imageid = uuid.uuid1()
-        imagefn = "/%s/%s.jpg" % (datadir,imageid)
+        imagefn = "%s/%s.jpg" % (datadir,imageid)
         open(imagefn, "wb").write(form["image"].value)
         os.system("convert %s -auto-orient -scale 800x800 %s" % (imagefn, imagefn))
         db.append({"id":imageid,"state":"open"})
@@ -61,6 +63,11 @@ if os.getenv("REQUEST_METHOD") == "POST":
 
 if os.getenv("REQUEST_METHOD") == "GET":
     if rcptid:
+        for rcpt in db:
+            if rcpt["id"] == rcptid:
+                break
+        if rcpt["id"] != rcptid:
+            output(False, 404)
         if endpoint == "bounds":
             parsed = parseocr.OCR(datadir+"/"+rcptid)
             output(parsed.maxbounds())
@@ -69,10 +76,22 @@ if os.getenv("REQUEST_METHOD") == "GET":
             ret = parsed.guess()
             ret["bounds"] = parsed.maxbounds()
             output(ret)
-        for rcpt in db:
-            if rcpt["id"] == rcptid:
-                output(rcpt)
-        output(False, 404)
+        elif endpoint == "cropimg":
+            im = Image.open("%s/%s.jpg" % (datadir, rcptid))
+            out = StringIO.StringIO()
+            if rcpt.get("crop_width"):
+                crop = im.crop([int(rcpt["crop_left"]),
+                                int(rcpt["crop_top"]),
+                                int(rcpt["crop_left"])+int(rcpt["crop_width"]),
+                                int(rcpt["crop_top"])+int(rcpt["crop_height"])])
+            else:
+                crop = im
+            crop.save(out, "jpeg")
+            print "Content-type: image/jpeg"
+            print
+            print out.getvalue()
+            sys.exit()
+        output(rcpt)
     for key in form:
         db = [x for x in db if x.get(key) == form.getfirst(key)]
     output(db)
