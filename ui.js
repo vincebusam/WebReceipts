@@ -171,7 +171,10 @@ $(document).ready(function() {
               //newhtml += '<img src="data/'+d.id+'.jpg">';
               newhtml += (d.name || "Unnamed")+'</a>';
               newhtml += '</li>';
-              $("#receiptslist").append(newhtml);
+              if (d.reimburse)
+                  $(newhtml).insertAfter("#expensereport")
+              else
+                  $(newhtml).insertAfter("#openreceipt")
           }
           $("#receiptslist").listview('refresh');
           $("#receiptslist a").click(function (e) {
