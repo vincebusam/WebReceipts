@@ -4,9 +4,12 @@ function refreshreceipts() {
     $.ajax({
       url: "api",
       success: function(data) {
+          $(".receiptlink").each(function() {
+              $(this).remove();
+          });
           for (var d in data) {
               d = data[d];
-              var newhtml = '<li data-theme="c">';
+              var newhtml = '<li data-theme="c" class="receiptlink">';
               newhtml += '<a id="'+d.id+'"href="#" data-transition="slide">';
               newhtml += (d.name || "Unnamed")+'</a>';
               newhtml += '</li>';
