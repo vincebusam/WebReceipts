@@ -3,6 +3,7 @@ var editid;
 function refreshreceipts() {
     $.ajax({
       url: "api",
+      data: { "state": "open" },
       success: function(data) {
           $(".receiptlink").each(function() {
               $(this).remove();
