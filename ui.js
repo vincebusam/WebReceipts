@@ -1,5 +1,32 @@
 var editid;
 
+function refreshreceipts() {
+    $.ajax({
+      url: "api",
+      success: function(data) {
+          for (var d in data) {
+              d = data[d];
+              var newhtml = '<li data-theme="c">';
+              newhtml += '<a id="'+d.id+'"href="#" data-transition="slide">';
+              newhtml += (d.name || "Unnamed")+'</a>';
+              newhtml += '</li>';
+              if (d.reimburse)
+                  $(newhtml).insertAfter("#expensereport")
+              else
+                  $(newhtml).insertAfter("#openreceipt")
+          }
+          $("#receiptslist").listview('refresh');
+          $("#receiptslist a").click(function (e) {
+              e.preventDefault();
+              editrcpt($(this).attr("id"));
+          });
+      },
+      error: function() {
+          alert("Error loading receipts");
+      }
+    });
+}
+
 function editrcpt(newid) {
     editid = newid;
     $.mobile.loading("show");
@@ -120,6 +147,7 @@ $(document).ready(function() {
             type: "POST",
             data: data,
             success: function(data) {
+                refreshreceipts();
                 $("#receiptdata").hide();
                 $("#receiptslist").show();
                 $.mobile.loading("hide");
@@ -161,29 +189,5 @@ $(document).ready(function() {
         });
     });
 
-    $.ajax({
-      url: "api",
-      success: function(data) {
-          for (var d in data) {
-              d = data[d];
-              var newhtml = '<li data-theme="c">';
-              newhtml += '<a id="'+d.id+'"href="#" data-transition="slide">';
-              //newhtml += '<img src="data/'+d.id+'.jpg">';
-              newhtml += (d.name || "Unnamed")+'</a>';
-              newhtml += '</li>';
-              if (d.reimburse)
-                  $(newhtml).insertAfter("#expensereport")
-              else
-                  $(newhtml).insertAfter("#openreceipt")
-          }
-          $("#receiptslist").listview('refresh');
-          $("#receiptslist a").click(function (e) {
-              e.preventDefault();
-              editrcpt($(this).attr("id"));
-          });
-      },
-      error: function() {
-          alert("Error loading receipts");
-      }
-    });
+    refreshreceipts();
 });
