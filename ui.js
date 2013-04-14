@@ -193,5 +193,8 @@ $(document).ready(function() {
         });
     });
 
+    $("#expensereport").click(function () {
+        document.location = "expensereport.html";
+    });
     refreshreceipts();
 });

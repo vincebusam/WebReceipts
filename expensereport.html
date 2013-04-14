@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>
+        Expense Report
+        </title>
+        <link type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/themes/ui-lightness/jquery-ui.css" rel="Stylesheet" />
+        <link type="text/css" rel="stylesheet" href="style.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.js"></script>
+        <!-- User-generated css -->
+        <style>
+        body {text-align: center;}
+        table {margin: 0 auto; text-align: left;}
+        table .dollar {text-align: right;}
+        #theader th {border-bottom: 1px solid black;}
+        #tsum td {border-top: 1px solid black;}
+        .rcptimg { border: 1px solid black; display: inline-block; padding: 5px; margin: 5px; width: 25%; vertical-align: top;}
+        .rcptimg img { width: 100%; }
+        .rcptimg h3,h4 {margin: 1px;}
+        </style>
+        <style type="text/css" media="print">
+        @page {
+            size: auto;   /* auto is the initial value */
+            margin: 0mm;  /* this affects the margin in the printer settings */
+        }
+        </style>
+        <!-- User-generated js -->
+        <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: "api",
+                data: { reimburse: true },
+                success: function(data) {
+                    var total = 0;
+                    for (var i=0; i<data.length; i++) {
+                    	if (!data[i].amount)
+                    	    continue;
+                    	if (data[i].amount[0] == "$")
+                    	    data[i].amount = data[i].amount.substring(1);
+                        $("<tr><td>"+data[i].name+"</td><td>"+data[i].date+"</td><td class='dollar'>$"+parseFloat(data[i].amount).toFixed(2)+"</td></tr>").insertAfter("#theader");
+                        total += parseFloat(data[i].amount);
+                        newdiv = "<div class='rcptimg'>";
+                        newdiv += "<h3>"+data[i].name+"</h3>";
+                        newdiv += "<h4>"+data[i].date+"</h4>";
+                        newdiv += "<h4>$"+parseFloat(data[i].amount).toFixed(2)+"</h4>";
+                        newdiv += "<img src='api/"+data[i].id+"/cropimg'></div>";
+                        $("#images").append(newdiv);
+                    }
+                    $("#sum").html("$"+total.toFixed(2));
+                }
+            });
+        });
+        </script>
+    </head>
+    <body>
+    <h2>Expense Report</h2>
+    <table>
+      <tr id="theader"><th>Name</th><th>Date</th><th>Amount</th></tr>
+      <tr id="tsum"><td colspan=2 style='text-align: right;'>Total:</td><td id="sum" class="dollar">0</td></tr>
+    </table>
+    <div id="images">
+    </div>
+    </body>
+</html>
