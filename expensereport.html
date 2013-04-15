@@ -31,7 +31,7 @@
         $(document).ready(function () {
             $.ajax({
                 url: "api",
-                data: { reimburse: true },
+                data: { reimburse: true, expensefiled: "unset" },
                 success: function(data) {
                     var total = 0;
                     for (var i=0; i<data.length; i++) {

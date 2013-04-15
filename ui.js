@@ -14,10 +14,12 @@ function refreshreceipts() {
               newhtml += '<a id="'+d.id+'"href="#" data-transition="slide">';
               newhtml += (d.name || "Unnamed")+'</a>';
               newhtml += '</li>';
-              if (d.reimburse)
-                  $(newhtml).insertAfter("#expensereport")
-              else
+              if (d.reimburse && JSON.parse(d.reimburse) && (!d.expensefiled || !JSON.parse(d.reimburse))) {
+                  var newrcpt = $(newhtml).insertAfter("#expensereport");
+                  $(newrcpt).children("a").addClass("expensercpt");
+              } else {
                   $(newhtml).insertAfter("#openreceipt")
+              }
           }
           $("#receiptslist").listview('refresh');
           $("#receiptslist a").click(function (e) {
@@ -140,6 +142,8 @@ $(document).ready(function() {
         });
         if ($("#reimburse").is(":checked"))
             data["reimburse"] = true;
+        else
+            data["reimburse"] = false;
         if ($('#ocrdiv').css('display') != 'none') {
             data["crop_top"] = parseInt($("#cropbox").css("top"));
             data["crop_left"] = parseInt($("#cropbox").css("left"));
@@ -193,8 +197,31 @@ $(document).ready(function() {
         });
     });
 
-    $("#expensereport").click(function () {
+    $("#expensegen").click(function () {
         document.location = "expensereport.html";
     });
+
+    $("#expensefiled").click(function (event) {
+        event.stopPropagation();
+        event.preventDefault();
+        $.mobile.loading("show");
+        var inexpenses = false;
+        $(".expensercpt").each(function () {
+            $.ajax({
+                url: "api/" + $(this).attr("id"),
+                type: "POST",
+                async: false,
+                data: {expensefiled: true},
+                success: function(data) {
+                },
+                error: function(data) {
+                    alert("Error updating");
+                }
+            });
+        });
+        $.mobile.loading("hide");
+        refreshreceipts();
+    });
+
     refreshreceipts();
 });
