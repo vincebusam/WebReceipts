@@ -1,10 +1,14 @@
-# WebRecipts
+# WebReceipts
 
 ## Summary
 
-Take pictures of your receipts with your phone, keep them online, OCR them.
+Mobile HTML5 app to capture and store receipts.
 
-## Installation
+### Features
+
+### Installation
+
+ - Requires ```convert``` from ImageMagick
 
 ```
 mkdir data
