@@ -93,7 +93,7 @@ if os.getenv("REQUEST_METHOD") == "GET":
             sys.exit()
         output(rcpt)
     for key in form:
-        db = [x for x in db if x.get(key) == form.getfirst(key)]
+        db = [x for x in db if (x.get(key) or "unset") == form.getfirst(key)]
     output(db)
 
 print json.dumps(False, 400)
